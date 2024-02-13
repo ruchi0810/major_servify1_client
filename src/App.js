@@ -5,6 +5,7 @@ import Add from "./components/adduser/Add";
 import Edit from "./components/updateuser/Edit";
 import ServiceProviderList from "./components/serviceproviderlist/ServiceProviderList";
 import Reviews from "./components/reviews/Reviews";
+import GetLocation from "./components/getlocation/GetLocation";
 
 function App() {
   //aa route
@@ -28,6 +29,10 @@ function App() {
     {
       path: "/reviews/:serviceProviderId", // Add a route for reviews
       element: <Reviews />,
+    },
+    {
+      path: "/getlocation", // Add a route for reviews
+      element: <GetLocation />,
     },
   ]);
 
