@@ -6,6 +6,7 @@ import Edit from "./components/updateuser/Edit";
 import ServiceProviderList from "./components/serviceproviderlist/ServiceProviderList";
 import Reviews from "./components/reviews/Reviews";
 import GetLocation from "./components/getlocation/GetLocation";
+import ServiceProviderProfilePage from "./components/ServiceProviderProfilePage/ServiceProviderProfilePage";
 
 function App() {
   //aa route
@@ -33,6 +34,10 @@ function App() {
     {
       path: "/getlocation", // Add a route for reviews
       element: <GetLocation />,
+    },
+    {
+      path: "/spimage",
+      element: <ServiceProviderProfilePage />,
     },
   ]);
 

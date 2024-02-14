@@ -118,6 +118,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
+import socket from "../../utils/socket";
 
 const Reviews = () => {
   const [serviceProvider, setServiceProvider] = useState({});
@@ -125,8 +126,8 @@ const Reviews = () => {
   const [userReview, setUserReview] = useState("");
   const [userRating, setUserRating] = useState(0);
   const { serviceProviderId } = useParams();
-  const userId = "65cb49b0222c5e20e0a34fb4";
-  const socket = io("http://localhost:8000");
+  const userId = "65cb48c8222c5e20e0a34fae";
+  // const socket = io("http://localhost:8000");
 
   const fetchServiceProvider = async () => {
     try {
@@ -161,7 +162,7 @@ const Reviews = () => {
     });
 
     return () => {
-      socket.disconnect();
+      // socket.disconnect();
     };
   }, [serviceProviderId, userId, socket]);
 
@@ -176,6 +177,9 @@ const Reviews = () => {
         alert("You have already given a review for this service provider.");
         return;
       }
+
+      // Set userRating to 0 if not provided
+      const ratingToSubmit = userRating === "" ? 0 : userRating;
 
       const response = await axios.post(
         `http://localhost:8000/api/service-providers/${serviceProviderId}/reviews`,
@@ -208,6 +212,9 @@ const Reviews = () => {
         <p>
           <strong>Email:</strong> {serviceProvider.spemail}
         </p>
+        <p>
+          <strong>Overall Rating:</strong> {serviceProvider.overallRating}
+        </p>
       </div>
 
       {/* Display Reviews */}
@@ -235,7 +242,7 @@ const Reviews = () => {
           Rating:
           <input
             type="number"
-            min="1"
+            min="0"
             max="5"
             value={userRating}
             onChange={(e) => setUserRating(e.target.value)}
