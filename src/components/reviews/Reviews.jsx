@@ -113,12 +113,12 @@
 //   );
 // };
 
-// export default Reviews;
+//export default Reviews;
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
-import socket from "../../utils/socket";
 
 const Reviews = () => {
   const [serviceProvider, setServiceProvider] = useState({});
@@ -126,8 +126,10 @@ const Reviews = () => {
   const [userReview, setUserReview] = useState("");
   const [userRating, setUserRating] = useState(0);
   const { serviceProviderId } = useParams();
-  const userId = "65cb48c8222c5e20e0a34fae";
-  // const socket = io("http://localhost:8000");
+  const userId = "65cdcb6f5fa84ad769cec77b";
+  const socket = io("http://localhost:8000", {
+    transports: ["websocket"],
+  });
 
   const fetchServiceProvider = async () => {
     try {
@@ -162,7 +164,7 @@ const Reviews = () => {
     });
 
     return () => {
-      // socket.disconnect();
+      socket.disconnect();
     };
   }, [serviceProviderId, userId, socket]);
 
@@ -178,9 +180,6 @@ const Reviews = () => {
         return;
       }
 
-      // Set userRating to 0 if not provided
-      const ratingToSubmit = userRating === "" ? 0 : userRating;
-
       const response = await axios.post(
         `http://localhost:8000/api/service-providers/${serviceProviderId}/reviews`,
         {
@@ -189,8 +188,8 @@ const Reviews = () => {
           reviews: userReview,
         }
       );
-      socket.emit("newReview", serviceProviderId);
       setReviews([...reviews, response.data]);
+      socket.emit("newReview", serviceProviderId);
       setUserReview("");
       setUserRating(0);
     } catch (error) {
@@ -211,9 +210,6 @@ const Reviews = () => {
         </p>
         <p>
           <strong>Email:</strong> {serviceProvider.spemail}
-        </p>
-        <p>
-          <strong>Overall Rating:</strong> {serviceProvider.overallRating}
         </p>
       </div>
 
@@ -242,7 +238,7 @@ const Reviews = () => {
           Rating:
           <input
             type="number"
-            min="0"
+            min="1"
             max="5"
             value={userRating}
             onChange={(e) => setUserRating(e.target.value)}
